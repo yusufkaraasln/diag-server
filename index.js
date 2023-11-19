@@ -1,11 +1,22 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import Mongo from './config/db.js';
+import cors from 'cors';
+import Routes from './routes/auth.js';
+import UserConfRoutes from './routes/userConfiguration.js';
+dotenv.config();
+
+cors();
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.use('/api', Routes);
+app.use('/api', UserConfRoutes);
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Server is running');
+  Mongo.connect();
 });
