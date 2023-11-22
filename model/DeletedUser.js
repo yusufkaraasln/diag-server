@@ -1,10 +1,17 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema(
+const DeletedUserSchema = new mongoose.Schema(
   {
+    old_id: {
+      type: String,
+      required: true,
+      unique: true
+    },
+
     name: {
       type: String,
       required: true,
+      unique: true,
       maxlength: 50
     },
 
@@ -85,7 +92,15 @@ const UserSchema = new mongoose.Schema(
         min: 4,
         max: 201,
         default: 80
-      },
+      }
+    },
+    old_createdAt: {
+      type: Date,
+      required: true
+    },
+    old_updatedAt: {
+      type: Date,
+      required: true
     }
   },
 
@@ -94,6 +109,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model('User', UserSchema);
+const DeletedUser = mongoose.model('DeletedUser', DeletedUserSchema);
 
-export default User;
+export default DeletedUser;
