@@ -16,6 +16,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/health-check', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Server is running!',
+    data: null
+  });
+});
+
 app.use('/api', AuthRoutes);
 app.use('/api', UserConfRoutes);
 app.use('/api', UserDetailsRoutes);
