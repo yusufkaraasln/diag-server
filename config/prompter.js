@@ -1,7 +1,9 @@
 import OpenAI from 'openai';
 
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
+
 const openai = new OpenAI({
-  apiKey: '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' // defaults to process.env["OPENAI_API_KEY"]
+  apiKey: OPENAI_KEY
 });
 
 const userComplaints = 'Basketbol oynarken top parmağımın dikine çarptı şuanda şişik.';
@@ -51,16 +53,14 @@ async function main() {
 
   const chatCompletion =
     checkMedicalPromptCompletionChoices.content === 'true' &&
-    (await openai.chat.completions
-      .create({
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: 50,
-        temperature: 0.8,
-        model: 'gpt-3.5-turbo-1106'
-      }))
+    (await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 50,
+      temperature: 0.8,
+      model: 'gpt-3.5-turbo-1106'
+    }));
 
-
-    console.log(chatCompletion.choices);
+  console.log(chatCompletion.choices);
 }
 
 main();
