@@ -1,88 +1,50 @@
-import OpenAI from 'openai';
+export default class Prompter {
+  static checkValidPrompt(userComplaints) {
+    const checkPrompt = `User complaints: ${userComplaints}
+    The part "User Complaints" should resemble the complaints a person would tell a doctor when visiting.
+    "User Complaints" should not be empty,
+    If it aids in diagnosing, print true; if it's irrelevant, never, under any circumstances, respond, only print false. However, you must be extremely careful here. When writing false, consider carefully whether it is related to the subject. If it is related, print true; otherwise, print false. I don't need a prompt from you for a response; just print true or false. Think of it like an enum – something like [true, false]. Only print true or false. Consider it like an enum.`;
 
-const OPENAI_KEY = process.env.OPENAI_API_KEY;
+    return checkPrompt;
+  }
 
-const openai = new OpenAI({
-  apiKey: OPENAI_KEY
-});
+  static diagnoPrompt({
+    tall,
+    age,
+    before_diseases,
+    ongoing_diseases,
+    weight,
+    sex,
+    closestPainArea,
+    userComplaints
+  }) {
+    const prompt = `Height: ${tall} cm
+    Previous Diseases: ${before_diseases.join(', ')}
+    Ongoing Diseases: ${ongoing_diseases.join(', ')}
+    Weight: ${weight} kg
+    Age: ${age}
+    Gender: ${sex}
+    Closest Pain Area: ${closestPainArea}
+    User Complaints: ${userComplaints}
+    
+    Based on this information, what is the user's diagnosis?
+    (Provide a single diagnosis,
+        do not give multiple diagnosis names,
+        provide a short diagnosis name,
+        do not give a long diagnosis name,
+        use a maximum of 3 words for the diagnosis name,
+        use medical language when giving a diagnosis (this is very important)),
+    
+    I want you to provide a single diagnosis name and never, under any circumstances, provide an explanation in parentheses. The diagnosis should be in medical terms. When giving a diagnosis, do not provide extra information in parentheses.
+    
+    Afterward, tell the user why you made such a prediction.
+    The output should be as follows:
+    Disease Name: ...
+    Recommended Doctor Specialty: ...
+    Why I made this prediction: ...
+    General Summary and Advice: ...
+    `;
 
-const userComplaints = 'Basketbol oynarken top parmağımın dikine çarptı şuanda şişik.';
-const height = 175;
-const closestPainArea = 'Sağ el';
-const previousIllnesses = ['Alerji', 'Astım'];
-const currentIllnesses = [];
-const weight = 70;
-const age = 30;
-const gender = 'Erkek';
-
-const prompt = `
-Boy: ${height} cm
-Önceki Hastalıklar: ${previousIllnesses.join(', ')}
-Mevcut Hastalıklar: ${currentIllnesses.join(', ')}
-Kilo: ${weight} kg
-Yaş: ${age}
-Cinsiyet: ${gender}
-En yakın ağrı bölgesi: ${closestPainArea}
-Kullanıcının şikayetleri: ${userComplaints}
-
-Bu bilgilere göre kullanıcının tanısı nedir?
- (Tek bir tanı ismi ver,
-     birden fazla tanı ismi verme,
-      tek bir tanı ismi vermeni istiyorum ve açıklama yapmanı asla ama asla istemiyorum parantezler içersinde ekstra bilgi verme,
-       tanı tıp dilinde olmalı, tanı ismi verirken tıp dilinde ver.)`;
-
-async function main() {
-  const checkMedicalPrompt = `
-    Kulalnıcı şikayetleri: ${userComplaints}
-
-    "Kullanıcı Şikayetleri" kısmı sadece tıp,
-    günlük hastalık şikayetleri,
-     tanı koymaya yardımcı bir propmt ise true yazdır,
-      alakasız bişi ise asla ama asla cevap verme sadece false yaz,fakat burada çok dikkatli olmalısın,
-          false yazarken konu ile ilgili olup olmadığını iyi düşün, eğer konu ile ilgili ise true yazdır,
-          yoksa false yaz. senden cevap için bir prompt istemiyorum, sadece true veya false yazdır. enum gibi düşün.
-          [true, false] gibi bir şey olmalı. sadece true veya false yazdır. enum gibi düşün.`;
-
-  const checkMedicalPromptCompletion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: checkMedicalPrompt }],
-    max_tokens: 1,
-    model: ''
-  });
-
-  const checkMedicalPromptCompletionChoices = checkMedicalPromptCompletion.choices[0].message;
-
-  const chatCompletion =
-    checkMedicalPromptCompletionChoices.content === 'true' &&
-    (await openai.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 50,
-      temperature: 0.8,
-      model: 'gpt-3.5-turbo-1106'
-    }));
-
-  console.log(chatCompletion.choices);
+    return prompt;
+  }
 }
-
-main();
-
-// const response = {
-//   is_valid_prompt: true, // (Boolean) Girdi kısmına hastalık ile alakalı bir prompt girilmiş mi? Bunun nedeni hastalık ile alakalı bir prompt girilmediyse, hastalık ile alakalı bir prompt girilmesi istenir.
-//   general_summary_and_advice: '...',
-//   diseases_and_descriptions: [
-//     {
-//       disease_name: '...', // Hastalığın sadece adı
-//       why: '...', // Neden böyle
-//       disease_medicine_department: '...'
-//     },
-//     {
-//       disease_name: '...',
-//       why: '...',
-//       disease_medicine_department: '...'
-//     },
-//     {
-//       disease_name: '...',
-//       why: '...',
-//       disease_medicine_department: '...'
-//     }
-//   ]
-// };

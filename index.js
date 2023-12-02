@@ -6,6 +6,7 @@ import AuthRoutes from './routes/auth.js';
 import UserConfRoutes from './routes/userConfiguration.js';
 import UserDetailsRoutes from './routes/userDetails.js';
 import UserSettingsRoute from './routes/userSettings.js';
+import DiagnoRoute from './routes/diagno.js';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api', AuthRoutes);
 app.use('/api', UserConfRoutes);
 app.use('/api', UserDetailsRoutes);
 app.use('/api', UserSettingsRoute);
+app.use('/api', DiagnoRoute);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server is running');
