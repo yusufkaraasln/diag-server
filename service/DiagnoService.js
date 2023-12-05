@@ -14,7 +14,7 @@ export default class DiagnoService {
     });
   }
 
-  async makeDiagno(user_id, userComplaints, closestPainArea) {
+  async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
     try {
       const { user_details } = await this._user.findById(user_id);
 
@@ -30,6 +30,7 @@ export default class DiagnoService {
         const prompt = Prompter.diagnoPrompt({
           ...user_details,
           userComplaints,
+          lang,
           closestPainArea
         });
         const res = await this._openAI.chat.completions.create({
@@ -51,13 +52,19 @@ export default class DiagnoService {
 
         const data = splitted_data.reduce((acc, item) => {
           const [key, value] = item;
-          if (key === 'Disease Name') {
+          if (key === 'Disease Name' || key === 'Hastalık Adı') {
             acc.disease_name = value;
-          } else if (key === 'Recommended Doctor Specialty') {
+          } else if (
+            key === 'Recommended Doctor Specialty' ||
+            key === 'Gidilmesi Gereken Doktor Bölümü'
+          ) {
             acc.disease_medicine_department = value;
-          } else if (key === 'Why I made this prediction') {
+          } else if (
+            key === 'Why I made this prediction' ||
+            key === 'Neden böyle bir tahminde bulundum'
+          ) {
             acc.why = value;
-          } else if (key === 'General Summary and Advice') {
+          } else if (key === 'General Summary and Advice' || key === 'Genel Özet ve Tavsiye') {
             acc.general_summary_and_advice = value;
           }
 

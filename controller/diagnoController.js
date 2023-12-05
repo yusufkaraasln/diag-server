@@ -10,9 +10,14 @@ export default class DiagnoController {
   makeDiagno = async (req, res) => {
     try {
       const { id } = req.user;
-      const { userComplaints, closestPainArea } = req.body;
+      const { userComplaints, closestPainArea, lang } = req.body;
 
-      const result = await this._diagnoService.makeDiagno(id, userComplaints, closestPainArea);
+      const result = await this._diagnoService.makeDiagno(
+        id,
+        userComplaints,
+        closestPainArea,
+        lang
+      );
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json(Result.fail(error.message, null));

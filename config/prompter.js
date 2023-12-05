@@ -16,9 +16,39 @@ export default class Prompter {
     weight,
     sex,
     closestPainArea,
-    userComplaints
+    userComplaints,
+    lang
   }) {
-    const prompt = `Height: ${tall} cm
+    const prompt =
+      lang == 'tr'
+        ? `Boy: ${tall} cm
+        Önceki Hastalıklar: ${before_diseases.join(', ')}
+        Mevcut Hastalıklar: ${ongoing_diseases.join(', ')}
+        Kilo: ${weight} kg
+        Yaş: ${age}
+        Cinsiyet: ${sex}
+        En yakın ağrı bölgesi: ${closestPainArea}
+        Kullanıcının şikayetleri: ${userComplaints}
+        
+        Bu bilgilere göre kullanıcının tanısı nedir?
+        (Tek bir tanı ismi ver,
+            birden fazla tanı ismi verme,
+            kısa bir tanı ismi ver,
+            uzun bir tanı ismi verme,
+            maksimum 3 kelime ile tanı ismi ver,
+            Doktorların kullandığı tanı isimlerini kullan (bu çok çok önemli)),
+        
+        tek bir tanı ismi vermeni istiyorum ve açıklama yapmanı asla ama asla istemiyorum parantezler içinde ekstra bilgi verme,
+        tanı tıp dilinde olmalı, tanı ismi verirken tıp dilinde ver.)
+        
+        Sonrasında kullanıcıya neden böyle bir tahminde bulunduğunu söyle.
+        Çıktı şu şekilde olmalı:
+        Hastalık Adı: ...
+        Gidilmesi Gereken Doktor Bölümü: ...
+        Neden böyle bir tahminde bulundum: ...
+        Genel Özet ve Tavsiye: ...
+        `
+        : `Height: ${tall} cm
     Previous Diseases: ${before_diseases.join(', ')}
     Ongoing Diseases: ${ongoing_diseases.join(', ')}
     Weight: ${weight} kg
