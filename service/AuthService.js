@@ -25,6 +25,46 @@ class AuthService {
     }
   }
 
+  async appleLogin({ uid, email }) {
+    try {
+      if (!uid && !email) {
+        return Result.fail('Missing Apple Credentials', null);
+      }
+
+
+
+      const user = await this._user.findOne({ uid });
+
+     
+
+      if (!user) {
+        try {
+          const newUser = await this._user.create({
+            email,
+            uid,
+            name: `Apple-${uuidv4()}`,
+            auth_type: 'apple'
+          });
+
+          const token = Jwt.sign({ id: newUser._id, type: newUser.auth_type, role: newUser.role });
+
+          const { __v, ...userWithoutVersion } = newUser._doc;
+
+          return Result.success('Apple register success', { user: userWithoutVersion, token });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      const token = Jwt.sign({ id: user._id, type: user.type, role: user.role });
+
+      const { __v, ...userWithoutVersion } = user._doc;
+
+      return Result.success('Apple login success', { user: userWithoutVersion, token });
+    } catch (error) {
+      return Result.fail(error.message, null);
+    }
+  }
   async googleLogin(idToken) {
     try {
       if (!idToken) {

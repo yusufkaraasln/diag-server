@@ -34,7 +34,10 @@ const DeletedUserSchema = new mongoose.Schema(
       type: String,
       required: false
     },
-
+    uid: {
+      type: String,
+      required: false
+    },
     configuration_steps: {
       completed: {
         type: Boolean,

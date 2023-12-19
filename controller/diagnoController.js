@@ -18,7 +18,10 @@ export default class DiagnoController {
         closestPainArea,
         lang
       );
-      res.status(200).json(result);
+      setTimeout(() => {
+        
+        res.status(200).json(result);
+      }, 25000);
     } catch (error) {
       res.status(500).json(Result.fail(error.message, null));
     }

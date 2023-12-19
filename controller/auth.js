@@ -5,6 +5,7 @@ class AuthController {
   constructor() {
     this._authService = new AuthService();
     this.guestLogin = this.guestLogin.bind(this);
+    this.appleLogin = this.appleLogin.bind(this);
     this.googleLogin = this.googleLogin.bind(this);
     this.getUserByToken = this.getUserByToken.bind(this);
   }
@@ -22,6 +23,18 @@ class AuthController {
     try {
       const { idToken } = req.body;
       const user = await this._authService.googleLogin(idToken);
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json(Result.fail(false, error.message, null));
+    }
+  }
+  async appleLogin(req, res) {
+    try {
+      const user = await this._authService.appleLogin({
+        uid: req.body.uid,
+        email: req.body.email
+      });
 
       res.json(user);
     } catch (error) {

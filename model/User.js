@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema(
     auth_type: {
       type: String,
       required: true,
-      enum: ['guest', 'google']
+      enum: ['guest', 'google', 'apple']
     },
     role: {
       type: String,
@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema(
       default: 'user'
     },
     avatar: {
+      type: String,
+      required: false
+    },
+    uid: {
       type: String,
       required: false
     },
@@ -85,7 +89,7 @@ const UserSchema = new mongoose.Schema(
         min: 4,
         max: 201,
         default: 80
-      },
+      }
     }
   },
 
