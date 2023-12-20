@@ -16,8 +16,6 @@ export default class DiagnoService {
 
   async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
     try {
-      const { user_details } = await this._user.findById(user_id);
-
       const checkRequest = await this._openAI.chat.completions.create({
         messages: [{ role: 'user', content: Prompter.checkValidPrompt(userComplaints) }],
         max_tokens: 1,
@@ -27,49 +25,12 @@ export default class DiagnoService {
       const isValidPrompt = checkRequest.choices[0].message.content == 'true';
 
       if (isValidPrompt) {
-        const prompt = Prompter.diagnoPrompt({
-          ...user_details,
-          userComplaints,
-          lang,
-          closestPainArea
-        });
-        const res = await this._openAI.chat.completions.create({
-          messages: [{ role: 'user', content: prompt }],
-          max_tokens: 300,
-          temperature: 0.8,
-          model: 'gpt-4-1106-preview'
-        });
-        const splitted_data = res.choices[0].message.content
-          .split('\n')
-          .map((item) => item.split(': '));
-
-        const emptyObject = {
-          disease_name: '',
-          disease_medicine_department: '',
-          why: '',
-          general_summary_and_advice: ''
-        };
-
-        const data = splitted_data.reduce((acc, item) => {
-          const [key, value] = item;
-          if (key === 'Disease Name' || key === 'Hastalık Adı') {
-            acc.disease_name = value;
-          } else if (
-            key === 'Recommended Doctor Specialty' ||
-            key === 'Gidilmesi Gereken Doktor Bölümü'
-          ) {
-            acc.disease_medicine_department = value;
-          } else if (
-            key === 'Why I made this prediction' ||
-            key === 'Neden böyle bir tahminde bulundum'
-          ) {
-            acc.why = value;
-          } else if (key === 'General Summary and Advice' || key === 'Genel Özet ve Tavsiye') {
-            acc.general_summary_and_advice = value;
-          }
-
-          return acc;
-        }, emptyObject);
+        // const emptyObject = {
+        //   disease_name: '',
+        //   disease_medicine_department: '',
+        //   why: '',
+        //   general_summary_and_advice: ''
+        // };
 
         return {
           success: true,
