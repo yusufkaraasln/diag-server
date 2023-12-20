@@ -18,18 +18,13 @@ export default class DiagnoService {
     try {
       const { user_details } = await this._user.findById(user_id);
 
-      // wait for accept after remove comment
+      const checkRequest = await this._openAI.chat.completions.create({
+        messages: [{ role: 'user', content: Prompter.checkValidPrompt(userComplaints) }],
+        max_tokens: 1,
+        model: 'gpt-4-1106-preview'
+      });
 
-      // const checkRequest = await this._openAI.chat.completions.create({
-      //   messages: [{ role: 'user', content: Prompter.checkValidPrompt(userComplaints) }],
-      //   max_tokens: 1,
-      //   model: 'gpt-4-1106-preview'
-      // });
-
-      const isValidPrompt = false
-
-      // wait for accept after remove comment
-      // checkRequest.choices[0].message.content == 'true';
+      const isValidPrompt = checkRequest.choices[0].message.content == 'true';
 
       if (isValidPrompt) {
         const prompt = Prompter.diagnoPrompt({
@@ -82,15 +77,11 @@ export default class DiagnoService {
           data
         };
       } else {
-
-        setTimeout(() => {
-          
-          return {
-            success: false,
-            message: 'Prompt is not valid.',
-            data: null
-          };
-        }, 15000);
+        return {
+          success: false,
+          message: 'Prompt is not valid.',
+          data: null
+        };
       }
     } catch (error) {
       throw error;
