@@ -3,6 +3,7 @@ import User from '../model/User.js';
 import dotenv from 'dotenv';
 import Prompter from '../config/prompter.js';
 import Result from '../dto/Result.js';
+import Truva from '../config/truva.js';
 
 dotenv.config();
 
