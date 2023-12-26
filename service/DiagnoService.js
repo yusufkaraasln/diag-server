@@ -15,7 +15,7 @@ export default class DiagnoService {
     });
   }
 
-  /* async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
+  async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
     try {
       const { user_details } = await this._user.findById(user_id);
 
@@ -87,9 +87,9 @@ export default class DiagnoService {
     } catch (error) {
       throw error;
     }
-  } */
+  }
 
-  async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
+  /* async makeDiagno(user_id, userComplaints, closestPainArea, lang) {
     try {
       const checkRequest = await this._openAI.chat.completions.create({
         messages: [{ role: 'user', content: Prompter.checkValidPrompt(userComplaints) }],
@@ -153,6 +153,7 @@ export default class DiagnoService {
           default:
             break;
         }
+
         return {
           success: true,
           message: 'Diagnosis successfully made.',
@@ -168,5 +169,5 @@ export default class DiagnoService {
     } catch (error) {
       throw error;
     }
-  }
+  } */
 }
