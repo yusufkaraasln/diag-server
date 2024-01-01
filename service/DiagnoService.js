@@ -36,7 +36,7 @@ export default class DiagnoService {
         });
         const res = await this._openAI.chat.completions.create({
           messages: [{ role: 'user', content: prompt }],
-          max_tokens: 300,
+          max_tokens: 600,
           temperature: 0.8,
           model: 'gpt-4-1106-preview'
         });
