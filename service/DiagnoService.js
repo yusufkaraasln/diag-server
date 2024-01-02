@@ -46,15 +46,33 @@ export default class DiagnoService {
 
         const emptyObject = {
           disease_name: '',
+          disease_name_detailed_description: '',
+          disease_symptoms: '',
+          disease_treatment: '',
+          disease_good_for: '',
           disease_medicine_department: '',
           why: '',
           general_summary_and_advice: ''
         };
 
+        console.log(splitted_data);
+
         const data = splitted_data.reduce((acc, item) => {
           const [key, value] = item;
           if (key === 'Disease Name' || key === 'Hastalık Adı') {
             acc.disease_name = value;
+          } else if (
+            key === 'Disease Name Detailed Description' ||
+            key ===
+              'Hastalık Adı Detaylı Açıklaması'
+          ) {
+            acc.disease_name_detailed_description = value;
+          } else if (key === 'Symptoms of Disease Name' || key === 'Hastalık Adının Semptomları') {
+            acc.disease_symptoms = value;
+          } else if (key === 'Treatment of Disease Name' || key === 'Hastalık Adının Tedavisi') {
+            acc.disease_treatment = value;
+          } else if (key === 'Things that will be good for Disease Name' || key === 'Hastalık Adına İyi Gelecek Şeyler') {
+            acc.disease_good_for = value;
           } else if (
             key === 'Recommended Doctor Specialty' ||
             key === 'Gidilmesi Gereken Doktor Bölümü'
