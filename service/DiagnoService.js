@@ -63,15 +63,26 @@ export default class DiagnoService {
             acc.disease_name = value;
           } else if (
             key === 'Disease Name Detailed Description' ||
-            key ===
-              'Hastalık Adı Detaylı Açıklaması'
+            key === 'Hastalık Adı Detaylı Açıklaması'
           ) {
             acc.disease_name_detailed_description = value;
-          } else if (key === 'Symptoms of Disease Name' || key === 'Hastalık Adının Semptomları') {
+          } else if (
+            key === 'Symptoms of Disease Name' ||
+            key === 'Symptoms of the Disease Name' ||
+            key === 'Hastalık Adının Semptomları'
+          ) {
             acc.disease_symptoms = value;
-          } else if (key === 'Treatment of Disease Name' || key === 'Hastalık Adının Tedavisi') {
+          } else if (
+            key === 'Treatment of Disease Name' ||
+            key === 'Treatment of the Disease Name' ||
+            key === 'Hastalık Adının Tedavisi'
+          ) {
             acc.disease_treatment = value;
-          } else if (key === 'Things that will be good for Disease Name' || key === 'Hastalık Adına İyi Gelecek Şeyler') {
+          } else if (
+            key === 'Things that will be good for Disease Name' ||
+            key === 'Things that will be good for the Disease Name' ||
+            key === 'Hastalık Adına İyi Gelecek Şeyler'
+          ) {
             acc.disease_good_for = value;
           } else if (
             key === 'Recommended Doctor Specialty' ||
