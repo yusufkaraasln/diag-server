@@ -51,7 +51,7 @@ app.use('/extension', async (req, res) => {
       ],
       max_tokens: 1000,
       temperature: 0.2,
-      model: 'gpt-4-32k'
+      model: 'gpt-4'
     });
     const data = prompt.choices[0].message.content;
 
